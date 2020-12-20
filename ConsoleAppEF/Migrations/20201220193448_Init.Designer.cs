@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConsoleAppEF.Migrations
 {
     [DbContext(typeof(AppContext))]
-    [Migration("20201220184618_Initial")]
-    partial class Initial
+    [Migration("20201220193448_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -25,7 +25,8 @@ namespace ConsoleAppEF.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<int>("Age")
                         .HasColumnType("int");
@@ -46,7 +47,7 @@ namespace ConsoleAppEF.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("197d56c1-b203-4a75-8234-baff9bef3f1c"),
+                            Id = new Guid("d96d0045-3177-4e96-a905-f61358f26cab"),
                             Age = 30,
                             Email = "Mubeen@gmail.com",
                             Name = "Mubeen",
@@ -54,7 +55,7 @@ namespace ConsoleAppEF.Migrations
                         },
                         new
                         {
-                            Id = new Guid("71e1461a-c50d-4594-a86a-9305045e6ea2"),
+                            Id = new Guid("b62b95f0-07cb-441f-8902-4e86065d7cdb"),
                             Age = 15,
                             Email = "Tahir@gmail.com",
                             Name = "Tahir",
@@ -62,7 +63,7 @@ namespace ConsoleAppEF.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e735dbeb-c68b-4b42-aa11-79a017dfa93d"),
+                            Id = new Guid("7aa9b9fa-2ab4-4cd2-a23b-4db16092e41a"),
                             Age = 25,
                             Email = "Cheema@gmail.com",
                             Name = "Cheema",

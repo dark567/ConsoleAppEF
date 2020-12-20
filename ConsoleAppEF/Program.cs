@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace ConsoleAppEF
 {
@@ -9,7 +10,58 @@ namespace ConsoleAppEF
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("Start");
+            AddItems();
+            ShowItems();
+            DelItems("Tahir");
+            ShowItems();
+
+            Console.WriteLine("Stop");
+            Console.ReadKey();
+        }
+
+        private static void ShowItems()
+        {
+            using (AppContext context = new AppContext())
+            {
+                foreach (var user in context.Users)
+                {
+                    Console.WriteLine($"{user.Id}\t{user.Name}\t{user.Age}\t{user.Email}\t{user.Password}");
+                }
+            }
+            Console.WriteLine();
+        }
+
+        private static void DelItems(string name)
+        {
+            using (AppContext context = new AppContext())
+            {
+                var user = context.Users.Where(a => a.Name == name).FirstOrDefault();
+                if (user != null)
+                {
+                    context.Remove(user);
+                }
+                else Console.WriteLine($"Item {name} not found");
+                context.SaveChanges();
+            }
+        }
+
+        private static void AddItems()
+        {
+            using (AppContext context = new AppContext())
+            {
+                User user = new User
+                {
+                    Email = "Mubeen1@gmail.com",
+                    Name = "Dark123",
+                    Age = 999,
+                    Password = "123123"
+                };
+
+                if (!context.Users.Where(a => a.Name == user.Name).Where(b => b.Email == user.Email).Any())
+                    context.Add(user);
+                context.SaveChanges();
+            }
         }
     }
 
@@ -35,6 +87,17 @@ namespace ConsoleAppEF
         protected override void OnModelCreating(ModelBuilder mb)
         {
             base.OnModelCreating(mb);
+
+            mb.Entity<User>().Property(x => x.Id).HasDefaultValueSql("NEWID()");
+
+            //mb.Entity<User>(b =>
+            //{
+            //    b.Property(u => u.Id).HasDefaultValueSql("newsequentialid()");
+            //});
+
+            //mb.Entity<User>()
+            //        .Property(e => e.Id)
+            //        .HasDefaultValueSql("newid()");
 
             mb.Entity<User>().HasData(
                 new User() { Id = Guid.NewGuid(), Email = "Mubeen@gmail.com", Name = "Mubeen", Age = 30, Password = "123123" },
