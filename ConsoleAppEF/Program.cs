@@ -17,13 +17,31 @@ namespace ConsoleAppEF
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid MyProperty { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public int Age { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 
     class AppContext : DbContext
     {
+
+        //public AppContext(DbContextOptions<AppContext> options)
+        //    : base(options)
+        //{
+        //}
+
+        protected override void OnModelCreating(ModelBuilder mb)
+        {
+            base.OnModelCreating(mb);
+
+            mb.Entity<User>().HasData(
+                new User() { Id = Guid.NewGuid(), Email = "Mubeen@gmail.com", Name = "Mubeen", Age = 30, Password = "123123" },
+                new User() { Id = Guid.NewGuid(), Email = "Tahir@gmail.com", Name = "Tahir", Age = 15, Password = "321321" },
+                new User() { Id = Guid.NewGuid(), Email = "Cheema@gmail.com", Name = "Cheema", Age = 25, Password = "123321" }
+                );
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
