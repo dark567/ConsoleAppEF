@@ -15,9 +15,63 @@ namespace ConsoleAppEF
             ShowItems();
             DelItems("Tahir");
             ShowItems();
+            AddRange();
+            ShowItems();
+
+            UpdateItem("Dark");
+            ShowItems();
 
             Console.WriteLine("Stop");
             Console.ReadKey();
+        }
+
+        private static void UpdateItem(string name)
+        {
+            using (AppContext context = new AppContext())
+            {
+                var users = context.Users.Where(a => a.Name == name).ToArray();
+                if (users != null)
+                {
+                    foreach (var user in users)
+                    {
+                        user.Email = "321";
+                    }
+
+                    context.UpdateRange(users);
+                    context.SaveChanges();
+                }
+
+            }
+        }
+
+        private static void AddRange()
+        {
+            using (AppContext context = new AppContext())
+            {
+                User user1 = new User
+                {
+                    Email = "Mubeen1@gmail.com",
+                    Name = "Dark123",
+                    Age = 999,
+                    Password = "123123"
+                };
+
+                User user2 = new User
+                {
+                    Email = "Mubeen1123@gmail.com",
+                    Name = "123Dark",
+                    Age = 999,
+                    Password = "123123"
+                };
+
+                if (!context.Users.Where(a => a.Name == user1.Name).Where(b => b.Email == user1.Email).Any())
+                    context.Add(user1);
+
+                if (!context.Users.Where(a => a.Name == user2.Name).Where(b => b.Email == user2.Email).Any())
+                    context.Add(user2);
+
+                context.SaveChanges();
+            }
         }
 
         private static void ShowItems()
